@@ -1,0 +1,137 @@
+<?php
+/*
+Plugin Name: CMB2 Field JS Controls
+Plugin URI: https://github.com/rubengc/cmb2-field-js-controls
+GitHub Plugin URI: https://github.com/rubengc/cmb2-field-js-controls
+Description: Show any field similar to Wordpress publishing actions (Post/Page post_status, visibility and post_date submit box field).
+Version: 1.0.0
+Author: Ruben Garcia
+Author URI: http://rubengc.com/
+License: GPLv2+
+*/
+
+
+// Exit if accessed directly
+if( !defined( 'ABSPATH' ) ) exit;
+
+if( !class_exists( 'CMB2_Field_JS_Controls' ) ) {
+
+    /**
+     * Class CMB2_Field_JS_Controls
+     */
+    class CMB2_Field_JS_Controls {
+
+        /**
+         * Current version number
+         */
+        const VERSION = '1.0.0';
+
+        /**
+         * Initialize the plugin by hooking into CMB2
+         */
+        public function __construct() {
+            // TODO: Find a way to add this content if field has parameter 'js_controls' => true
+        }
+
+        /**
+         * @param  array        $field_args     Current field args
+         * @param  CMB2_Field   $field          Current field object
+         */
+        public function before_row( $field_args, $field ) {
+            $this->setup_admin_scripts();
+
+            $field_args = $this->parse_field_args( $field_args );
+
+            if( isset( $field_args['icon'] ) ) {
+                $icon = ( ( strpos( $field_args['icon'], 'dashicons-' ) !== false ) ? 'dashicons ' : '' ) . $field_args['icon'];
+            }
+
+            $id_attr_prefix = 'cmb-field-js-controls-' . $field_args['id'];
+
+            ?>
+            <div id="<?php echo $id_attr_prefix; ?>-before" class="cmb-field-js-controls-before">
+
+                <?php if( isset( $icon ) ) : ?>
+                    <span id="<?php echo $id_attr_prefix; ?>-icon" class="cmb-field-js-controls-icon <?php echo $icon; ?>"></span>
+                <?php endif; ?>
+
+                <span id="<?php echo $id_attr_prefix; ?>-label" class="cmb-field-js-controls-label"><?php echo $field_args['name']; ?>:</span>
+
+                <div id="<?php echo $id_attr_prefix; ?>-value" class="cmb-field-js-controls-value"><?php $field->render_column(); ?></div>
+
+                <?php if( $field_args['controls']['edit_button'] ) : ?>
+                    <a href="#<?php echo $field_args['id']; ?>" id="<?php echo $id_attr_prefix; ?>-edit" class="cmb-field-js-controls-edit hide-if-no-js"><?php echo $field_args['controls']['edit_button']; ?></a>
+                <?php endif; ?>
+            </div>
+            <?php
+        }
+
+        /**
+         * @param  array        $field_args     Current field args
+         * @param  CMB2_Field   $field          Current field object
+         */
+        public function after_row( $field_args, $field ) {
+            $field_args = $this->parse_field_args( $field_args );
+
+            $id_attr_prefix = 'cmb-field-js-controls-' . $field_args['id'];
+
+            ?>
+            <div id="<?php echo $id_attr_prefix; ?>-after" class="cmb-field-js-controls-after hide-if-js">
+                <?php if( $field_args['controls']['save_button'] ) : ?>
+                    <a href="#<?php echo $field_args['id']; ?>" id="<?php echo $id_attr_prefix; ?>-save" class="cmb-field-js-controls-save button"><?php echo $field_args['controls']['save_button']; ?></a>
+                <?php endif; ?>
+
+                <?php if( $field_args['controls']['cancel_button'] ) : ?>
+                    <a href="#<?php echo $field_args['id']; ?>" id="<?php echo $id_attr_prefix; ?>-cancel" class="cmb-field-js-controls-cancel"><?php echo $field_args['controls']['cancel_button']; ?></a>
+                <?php endif; ?>
+            </div>
+            <?php
+        }
+
+        /**
+         * @param   array   $field_args     Current field args
+         * @return  array
+         */
+        private function parse_field_args( $field_args ) {
+            $field_args['controls'] = array_merge(
+                array(
+                    'edit_button'   => __( 'Edit' ),
+                    'save_button'   => __( 'OK' ),
+                    'cancel_button' => __( 'Cancel' ),
+                ),
+                ( ( isset( $field_args['controls'] ) && is_array( $field_args['controls'] ) ) ? $field_args['controls'] : array() )
+            );
+
+            return $field_args;
+        }
+
+        /**
+         * Enqueue scripts and styles
+         */
+        public function setup_admin_scripts() {
+            wp_register_script( 'cmb-js-controls-event-manager', plugins_url( 'js/event-manager.min.js', __FILE__ ), array( 'jquery' ), self::VERSION );
+            wp_register_script( 'cmb-js-controls', plugins_url( 'js/js-controls.js', __FILE__ ), array( 'jquery', 'cmb-js-controls-event-manager' ), self::VERSION );
+
+            wp_enqueue_script( 'cmb-js-controls-event-manager' );
+            wp_enqueue_script( 'cmb-js-controls' );
+
+            wp_enqueue_style( 'cmb-js-controls', plugins_url( 'css/js-controls.css', __FILE__ ), array(), self::VERSION );
+        }
+
+    }
+
+    //$cmb2_field_js_controls = new CMB2_Field_JS_Controls();
+
+    // TODO: Temporal solution to output html content
+    function js_controls_before( $field_args, $field ) {
+        $cmb2_field_js_controls = new CMB2_Field_JS_Controls();
+
+        $cmb2_field_js_controls->before_row( $field_args, $field );
+    }
+
+    function js_controls_after( $field_args, $field ) {
+        $cmb2_field_js_controls = new CMB2_Field_JS_Controls();
+
+        $cmb2_field_js_controls->after_row( $field_args, $field );
+    }
+}
