@@ -30,6 +30,8 @@ if( !class_exists( 'CMB2_Field_JS_Controls' ) ) {
          * Initialize the plugin by hooking into CMB2
          */
         public function __construct() {
+            add_action( 'admin_enqueue_scripts', array( $this, 'setup_admin_scripts' ) );
+
             // TODO: Find a way to add this content if field has parameter 'js_controls' => true
         }
 
@@ -38,8 +40,6 @@ if( !class_exists( 'CMB2_Field_JS_Controls' ) ) {
          * @param  CMB2_Field   $field          Current field object
          */
         public function before_row( $field_args, $field ) {
-            $this->setup_admin_scripts();
-
             $field_args = $this->parse_field_args( $field_args );
 
             if( isset( $field_args['icon'] ) ) {
