@@ -3,6 +3,8 @@ CMB2 Field JS Controls
 
 Plugin for [CMB2](https://github.com/WebDevStudios/CMB2) to show any field similar to Wordpress publishing actions (Post/Page post_status, visibility and post_date submit box field).
 
+![example](example.gif)
+
 ## Installation
 
 You can install this field type as you would a WordPress plugin:
@@ -99,10 +101,6 @@ function custom_field_output_by_field_type( output, field ) {
     return output;
 }
 ```
-
-## Screenshot
-
-![example](example.gif)
 
 ## Changelog
 
