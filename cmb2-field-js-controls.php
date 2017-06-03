@@ -1,14 +1,18 @@
 <?php
-/*
-Plugin Name: CMB2 Field JS Controls
-Plugin URI: https://github.com/rubengc/cmb2-field-js-controls
-GitHub Plugin URI: https://github.com/rubengc/cmb2-field-js-controls
-Description: Show any field similar to Wordpress publishing actions (Post/Page post_status, visibility and post_date submit box field).
-Version: 1.0.0
-Author: Ruben Garcia
-Author URI: http://rubengc.com/
-License: GPLv2+
-*/
+/**
+ * @package      CMB2\Field_JS_Controls
+ * @author       Tsunoa
+ * @copyright    Copyright (c) Tsunoa
+ *
+ * Plugin Name: CMB2 Field JS Controls
+ * Plugin URI: https://github.com/rubengc/cmb2-field-js-controls
+ * GitHub Plugin URI: https://github.com/rubengc/cmb2-field-js-controls
+ * Description: Show any field similar to Wordpress publishing actions (Post/Page post_status, visibility and post_date submit box field).
+ * Version: 1.0.0
+ * Author: Tsunoa
+ * Author URI: https://tsunoa.com/
+ * License: GPLv2+
+ */
 
 
 // Exit if accessed directly
@@ -109,8 +113,8 @@ if( !class_exists( 'CMB2_Field_JS_Controls' ) ) {
          * Enqueue scripts and styles
          */
         public function setup_admin_scripts() {
-            wp_register_script( 'cmb-js-controls-event-manager', plugins_url( 'js/event-manager.min.js', __FILE__ ), array( 'jquery' ), self::VERSION );
-            wp_register_script( 'cmb-js-controls', plugins_url( 'js/js-controls.js', __FILE__ ), array( 'jquery', 'cmb-js-controls-event-manager' ), self::VERSION );
+            wp_register_script( 'cmb-js-controls-event-manager', plugins_url( 'js/event-manager.min.js', __FILE__ ), array( 'jquery' ), self::VERSION, true );
+            wp_register_script( 'cmb-js-controls', plugins_url( 'js/js-controls.js', __FILE__ ), array( 'jquery', 'cmb-js-controls-event-manager' ), self::VERSION, true );
 
             wp_enqueue_script( 'cmb-js-controls-event-manager' );
             wp_enqueue_script( 'cmb-js-controls' );
@@ -134,4 +138,6 @@ if( !class_exists( 'CMB2_Field_JS_Controls' ) ) {
 
         $cmb2_field_js_controls->after_row( $field_args, $field );
     }
+
+    $cmb2_field_js_controls = new CMB2_Field_JS_Controls();
 }
