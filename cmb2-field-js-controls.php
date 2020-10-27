@@ -46,8 +46,8 @@ if( !class_exists( 'CMB2_Field_JS_Controls' ) ) {
         public function before_row( $field_args, $field ) {
             $field_args = $this->parse_field_args( $field_args );
 
-            if( isset( $field_args['icon'] ) ) {
-                $icon = ( ( strpos( $field_args['icon'], 'dashicons-' ) !== false ) ? 'dashicons ' : '' ) . $field_args['icon'];
+            if( ! empty( $field_args['js_controls']['icon'] ) ) {
+                $icon = ( ( strpos( $field_args['js_controls']['icon'], 'dashicons-' ) !== false ) ? 'dashicons ' : '' ) . $field_args['js_controls']['icon'];
             }
 
             $id_attr_prefix = 'cmb-field-js-controls-' . $field_args['id'];
@@ -82,11 +82,17 @@ if( !class_exists( 'CMB2_Field_JS_Controls' ) ) {
             ?>
             <div id="<?php echo $id_attr_prefix; ?>-after" class="cmb-field-js-controls-after hide-if-js">
                 <?php if( $field_args['js_controls']['save_button'] ) : ?>
-                    <a href="#<?php echo $field_args['id']; ?>" id="<?php echo $id_attr_prefix; ?>-save" class="cmb-field-js-controls-save button"><?php echo $field_args['js_controls']['save_button']; ?></a>
+                    <a href="#<?php echo $field_args['id']; ?>"
+                       id="<?php echo $id_attr_prefix; ?>-save"
+                       class="cmb-field-js-controls-save <?php echo esc_attr( $field_args['js_controls']['save_button_classes'] ); ?>"
+                    ><?php echo $field_args['js_controls']['save_button']; ?></a>
                 <?php endif; ?>
 
                 <?php if( $field_args['js_controls']['cancel_button'] ) : ?>
-                    <a href="#<?php echo $field_args['id']; ?>" id="<?php echo $id_attr_prefix; ?>-cancel" class="cmb-field-js-controls-cancel"><?php echo $field_args['js_controls']['cancel_button']; ?></a>
+                    <a href="#<?php echo $field_args['id']; ?>"
+                       id="<?php echo $id_attr_prefix; ?>-cancel"
+                       class="cmb-field-js-controls-cancel <?php echo esc_attr( $field_args['js_controls']['cancel_button_classes'] ); ?>"
+                    ><?php echo $field_args['js_controls']['cancel_button']; ?></a>
                 <?php endif; ?>
             </div>
             <?php
@@ -99,9 +105,12 @@ if( !class_exists( 'CMB2_Field_JS_Controls' ) ) {
         private function parse_field_args( $field_args ) {
             $field_args['js_controls'] = array_merge(
                 array(
+                    'icon'          => '',
                     'edit_button'   => __( 'Edit' ),
                     'save_button'   => __( 'OK' ),
+                    'save_button_classes'   => 'button',
                     'cancel_button' => __( 'Cancel' ),
+                    'cancel_button_classes' => '',
                 ),
                 ( ( isset( $field_args['js_controls'] ) && is_array( $field_args['js_controls'] ) ) ? $field_args['js_controls'] : array() )
             );

@@ -45,7 +45,9 @@ function cmb2_js_controls_metabox() {
         'id'   => 'js_field',
         'type' => 'text',
         // CMB2 Field JS Controls parameters
-        'icon' => 'dashicons-dashboard',
+        'js_controls' => array(
+            'icon' => 'dashicons-dashboard',
+        ),
         
         // Temporal solution to output html content
         'before_row' => 'js_controls_before',
@@ -63,8 +65,8 @@ function cmb2_js_controls_metabox() {
             'option_3' => __( 'Option 3', 'cmb2' ),
         ),
         // CMB2 Field JS Controls parameters
-        'icon' => 'dashicons-admin-users',
         'js_controls' => array(
+            'icon' => 'dashicons-admin-users',
             'edit_button' => __( 'Modify', 'cmb2' ),
             'save_button' => __( 'Save', 'cmb2' ),
             'cancel_button' => __( 'Revert', 'cmb2' ),

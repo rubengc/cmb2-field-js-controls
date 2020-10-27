@@ -28,16 +28,14 @@
 
         if ( ! field_row.is( ':hidden' ) ) {
             // Update value to show
-            var value = '';
             var value_container = field_row.prev('.cmb-field-js-controls-before').find('.cmb-field-js-controls-value');
             var field_type = 'text';
 
-            if( value_container.find('[data-fieldtype]').length ) {
-                value_container = value_container.find('[data-fieldtype]');
-                field_type = value_container.attr('data-fieldtype');
+            if( field_row[0].hasAttribute('data-fieldtype') ) {
+                field_type = field_row.attr('data-fieldtype');
             }
 
-            value_container.html( cmb_js_controls_display_field( field, field_type, value_container ) );
+            value_container.html( cmb_js_controls_display_field( field, field_type ) );
 
             // Remove previous value attribute
             field_row.prev('.cmb-field-js-controls-before').find('.cmb-field-js-controls-edit').removeAttr('data-value');
@@ -97,22 +95,22 @@ function cmb_js_controls_display_field( field, field_type ) {
     // Built-in CMB2 fields
 
     // select
-    if( field_type == 'select' && field.find('option[value="' + field.val() + '"]').length ) {
+    if( field_type === 'select' && field.find('option[value="' + field.val() + '"]').length ) {
         return field.find('option[value="' + field.val() + '"]').html();
     }
 
     // colorpicker
-    if( field_type == 'colorpicker' ) {
+    if( field_type === 'colorpicker' ) {
         return '<span class="cmb2-colorpicker-swatch"><span style="background-color:' + field.val() + '"></span> ' + field.val() + '</span>';
     }
 
     // radio
-    if( field_type == 'radio' ) {
+    if( field_type === 'radio' ) {
         // TODO: Get label text
     }
 
     // CMB2 custom fields
-    if( field_type == 'post_ajax_search' || field_type == 'user_ajax_search' || field_type == 'term_ajax_search' ) {
+    if( field_type === 'post_ajax_search' || field_type === 'user_ajax_search' || field_type === 'term_ajax_search' ) {
         var anchor = field.closest('.cmb-row').prev('.cmb-field-js-controls-before').find('.cmb-field-js-controls-value .cmb-column a');
 
         if( anchor.length ) {
